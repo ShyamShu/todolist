@@ -42,5 +42,10 @@ public class User  implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
        return java.util.Collections.singleton(new SimpleGrantedAuthority("USER"));
     }
+
+    @Override
+    public String toString() {
+        return "Task{id=" + id + "}";
+    }
     
 }

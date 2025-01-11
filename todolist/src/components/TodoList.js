@@ -6,6 +6,8 @@ import "./TodoList.css";
 const TodoList = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
+  const [editingTask, setEditingTask] = useState(null);  // Store the task being edited
+  const [editedDescription, setEditedDescription] = useState("");  // Store edited description
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,21 +17,27 @@ const TodoList = () => {
   const fetchTasks = async () => {
     try {
       const response = await API.get("/task");
-      console.log("Fetched tasks:", response.data);
-      setTasks(response.data);
-
-    } catch (error) {
-      if (error.response) {
-        if (error.response.status === 401) {
-          alert("Session expired. Please log in again.");
-          localStorage.removeItem("token");
-          navigate("/login");
-        } else {
-          alert("Error fetching tasks: " + error.response.data.message);
-        }
+      if (Array.isArray(response.data)) {
+        setTasks(response.data);
       } else {
-        alert("Network error: " + error.message);
+        console.log("Unexpected data structure:", response.data);
       }
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const handleError = (error) => {
+    if (error.response) {
+      if (error.response.status === 401) {
+        alert("Session expired. Please log in again.");
+        localStorage.removeItem("token");
+        navigate("/login");
+      } else {
+        alert("Error fetching tasks: " + error.response.data.message);
+      }
+    } else {
+      alert("Network error: " + error.message);
     }
   };
 
@@ -40,7 +48,7 @@ const TodoList = () => {
           description: newTask,
           completed: false,
         });
-        //setTasks([...tasks, response.data]);
+        setTasks([...tasks, response.data]);
         setNewTask("");
         fetchTasks();
       } catch (error) {
@@ -57,6 +65,7 @@ const TodoList = () => {
         },
       });
       setTasks(tasks.filter((task) => task.id !== id));
+      fetchTasks();
     } catch (error) {
       alert("Error deleting task: " + error.message);
     }
@@ -70,6 +79,38 @@ const TodoList = () => {
     } catch (error) {
       alert("Error updating task: " + error.message);
     }
+  };
+
+  const handleEditClick = (task) => {
+    setEditingTask(task);
+    setEditedDescription(task.description);
+  };
+
+  const handleUpdateTask = async (taskId) => {
+    if (editedDescription.trim()) {
+      try {
+        const updatedTask = { ...editingTask, description: editedDescription };
+        const response = await API.put(`/task/${taskId}`, updatedTask);
+        setTasks(tasks.map((task) => (task.id === taskId ? response.data : task)));
+        
+        // Reset the editing state after updating
+        setEditingTask(null);
+        setEditedDescription("");
+        fetchTasks();  // Clear the input after the update
+      } catch (error) {
+        alert("Error updating task: " + error.message);
+      }
+    }
+  };
+
+  const handleKeyDown = (e, taskId) => {
+    if (e.key === "Enter") {
+      handleUpdateTask(taskId);
+    }
+  };
+
+  const handleBlur = (taskId) => {
+    handleUpdateTask(taskId);
   };
 
   const handleLogout = () => {
@@ -105,18 +146,36 @@ const TodoList = () => {
               key={task.id}
               className={`task-item ${task.completed ? "completed" : ""}`}
             >
-              <span
-                className="task-text"
-                onClick={() => toggleTaskCompletion(task)}
-              >
-                {task.description}
-              </span>
+              {editingTask?.id === task.id ? (
+                <input
+                  type="text"
+                  value={editedDescription}
+                  onChange={(e) => setEditedDescription(e.target.value)}
+                  onBlur={() => handleBlur(task.id)}  // Save on blur
+                  onKeyDown={(e) => handleKeyDown(e, task.id)}  // Save on Enter
+                />
+              ) : (
+                <span
+                  className="task-text"
+                  onClick={() => toggleTaskCompletion(task)}  // Toggle task completion
+                >
+                  {task.description}
+                </span>
+              )}
               <button
                 className="delete-btn"
-                onClick={() => deleteTask(task.id)}
+                onClick={() => deleteTask(task.id)}  // Delete task
               >
                 Delete
               </button>
+              {editingTask?.id !== task.id && (
+                <button
+                  className="edit-btn"
+                  onClick={() => handleEditClick(task)}  // Enable editing mode
+                >
+                  Edit
+                </button>
+              )}
             </div>
           ))
         )}

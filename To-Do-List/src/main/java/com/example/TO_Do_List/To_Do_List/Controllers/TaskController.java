@@ -1,6 +1,7 @@
 package com.example.TO_Do_List.To_Do_List.Controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,7 +61,10 @@ public class TaskController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        return ResponseEntity.ok(taskServices.findByUser(user));
+        List<Task> tasks = taskServices.findByUser(user);
+        logger.info(tasks.toString());
+        
+        return ResponseEntity.ok(tasks);
     }
 
     @PostMapping
@@ -87,5 +92,13 @@ public class TaskController {
 
         taskServices.delete(task);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Task> updateTask(@PathVariable String id, @RequestBody Task updatedTask) {
+        
+        
+        Task savedTask = taskServices.updateTask(id , updatedTask);
+        return ResponseEntity.ok(savedTask);  // Return updated task
     }
 }
