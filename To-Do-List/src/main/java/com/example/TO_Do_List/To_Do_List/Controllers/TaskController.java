@@ -39,8 +39,10 @@ public class TaskController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    // logger for logging 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    // finding the user associated with authentication bearer(jwt token)
     private User getAuthenticatedUser(String token) {
        try {
         logger.info("Token received: " + token);
@@ -55,6 +57,8 @@ public class TaskController {
 
     }
 
+
+     //getting the List of task with the help of user 
     @GetMapping
     public ResponseEntity<List<Task>> getTasks(@RequestHeader("Authorization") String token) {
         User user = getAuthenticatedUser(token);
@@ -67,6 +71,8 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
+
+    // adding the task  with post method
     @PostMapping
     public ResponseEntity<Task> addTask(@RequestBody Task task, @RequestHeader("Authorization") String token) {
         logger.info("Token received: " + token);
@@ -78,6 +84,8 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body(taskServices.saveTask(task));
     }
 
+
+    // deleteing the task with help of id comes in parameter
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable String id, @RequestHeader("Authorization") String token) {
         User user = getAuthenticatedUser(token);

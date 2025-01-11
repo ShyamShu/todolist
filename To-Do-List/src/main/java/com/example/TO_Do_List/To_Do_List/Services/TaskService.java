@@ -19,20 +19,25 @@ public class TaskService {
     @Autowired
     TaskRepo taskRepo;
 
+    //finding the Task associated with user
     public Task findByUser(String id) {
          return  taskRepo.findById(id).orElseThrow();
     }
 
+    // saving the task in database
     public Task saveTask(Task task) {
         String id = UUID.randomUUID().toString();
         task.setId(id);
         return taskRepo.save(task);
     }
 
+    // deleteng the task from databse
     public void delete(Task task) {
         taskRepo.delete(task);
     }
 
+
+    // finding all the task related to the specified user
     public List<Task> findByUser(User authenticatedUser) {
         List<Task> tasks = taskRepo.findByUser(authenticatedUser);
         //logger.info("list of task are : {}" , tasks.toString());
@@ -42,6 +47,7 @@ public class TaskService {
         return tasks;
     }
 
+    // finding a task associated with task id 
     public Task findById(String id) {
         Task task =  taskRepo.findById(id).orElseThrow() ;
         if(task != null)
@@ -52,6 +58,7 @@ public class TaskService {
         return null;
     }
 
+    // updating the task with new task with the help of id
     public Task updateTask(String id , Task modified) {
 
         Task existingTask = findById(id);

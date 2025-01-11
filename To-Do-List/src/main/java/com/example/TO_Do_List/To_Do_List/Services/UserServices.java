@@ -14,16 +14,23 @@ public class UserServices {
     @Autowired
     UserRepo userRepo;
 
+
+    // saving user in databse
     public void saveUser(User user) {
+        // generating the user id for user
         String id = UUID.randomUUID().toString();
         user.setId(id);
         userRepo.save(user);
     }
 
+
+    //checking user is exist or not   with username 
     public boolean existsByUsername(String username) {
         return userRepo.existsByUsername(username);
     }
 
+
+    // extracting user with username 
     public User findByUsername(String username) {
         return userRepo.findByUsername(username);
     }

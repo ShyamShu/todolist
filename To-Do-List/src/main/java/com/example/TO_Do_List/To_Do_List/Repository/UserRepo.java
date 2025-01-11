@@ -9,6 +9,7 @@ import com.example.TO_Do_List.To_Do_List.Entity.User;
 
 
 @Repository
+// initializing the user repository with the jpa repository
 public interface UserRepo  extends JpaRepository<User , String>{
     User findByUsername(String username);
     public boolean existsByUsername(String Username);

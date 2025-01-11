@@ -3,8 +3,6 @@ package com.example.TO_Do_List.To_Do_List.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -42,9 +40,9 @@ public class SecurityConfig {
                                 .requestMatchers( "/api/auth/**").permitAll() // Public endpoints
                                 .anyRequest().authenticated() // All other endpoints require authentication
                 )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)// required jwt authetication
                 .httpBasic(Customizer.withDefaults())
-                .cors(Customizer.withDefaults());
+                .cors(Customizer.withDefaults()); // enabling cores through security chain
 
         return http.build();
     }
@@ -53,6 +51,7 @@ public class SecurityConfig {
 
 
    @Bean
+   // providing own authentication provider with the help of dao
 public AuthenticationProvider authenticationProvider()
 {
      DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -62,6 +61,7 @@ public AuthenticationProvider authenticationProvider()
 }
 
 @Bean
+// authentication manager who uses dao for authenticating user in backend 
 public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
     AuthenticationManagerBuilder authenticationManagerBuilder = 
         http.getSharedObject(AuthenticationManagerBuilder.class);

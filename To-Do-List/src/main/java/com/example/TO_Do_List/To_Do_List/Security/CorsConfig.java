@@ -5,6 +5,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+// handling croos site handling or enable commubnication with react 
 public class CorsConfig implements WebMvcConfigurer {
 
     @Override

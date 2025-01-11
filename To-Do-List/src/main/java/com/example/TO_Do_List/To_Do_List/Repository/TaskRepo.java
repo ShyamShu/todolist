@@ -11,6 +11,7 @@ import com.example.TO_Do_List.To_Do_List.Entity.Task;
 import com.example.TO_Do_List.To_Do_List.Entity.User;
 
 @Repository
+// reposiitory iinitialization with jpa
 public interface TaskRepo extends JpaRepository<Task , String> {
     @Query("SELECT t FROM Task t WHERE t.user = :user")
     List<Task> findByUser(@Param("user") User user);

@@ -9,6 +9,7 @@ import com.example.TO_Do_List.To_Do_List.Entity.User;
 import com.example.TO_Do_List.To_Do_List.Repository.UserRepo;
 
 @Service
+// implementing the user details service to authenticate user in dao 
 public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired

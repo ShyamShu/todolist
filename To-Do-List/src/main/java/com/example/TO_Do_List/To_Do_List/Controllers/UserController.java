@@ -36,6 +36,8 @@ public class UserController {
     @Autowired
     private JwtUtil jwtUtil;
 
+
+    // registering the user through their credentials enetr in front end react
    @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@RequestBody User user) {
     // Check if the username already exists
@@ -55,11 +57,14 @@ public class UserController {
                          .body(Map.of("message", "User registered successfully"));
 }
 
+
+//logging the uuser into systrem and giving hime jwt token for further communication
     @PostMapping("/login")
     public String login(@RequestBody User user) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
         );
+        // it return token created with credentials
         return jwtUtil.generateToken(user.getUsername());
     }
     
