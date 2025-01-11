@@ -41,3 +41,49 @@ Clone the repository to your local machine:
 ```bash
 git clone[ https://github.com/your-username/todolist-app.git](https://github.com/ShyamShu/todolist)
 
+
+## **2. Setup and Run Backend (Spring Boot)**
+Navigate to the backend directory:
+
+bash
+Copy code
+cd backend
+Build the Spring Boot application:
+
+Run the following Maven command to install the necessary dependencies and build the project:
+
+bash
+Copy code
+mvn clean install
+Run the Spring Boot application:
+
+You can now run the backend application with this command:
+
+bash
+Copy code
+mvn spring-boot:run
+The backend should now be running on http://localhost:8080.
+
+
+## **3. Setup and Run Frontend (React)**
+Navigate to the frontend directory:
+
+bash
+Copy code
+cd ../frontend
+Install React project dependencies:
+
+Run the following command to install all necessary npm dependencies:
+
+bash
+Copy code
+npm install
+Start the React development server:
+
+Run the following command to start the React frontend:
+
+bash
+Copy code
+npm start
+The frontend should now be running on http://localhost:3000.
+
