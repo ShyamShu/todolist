@@ -1,0 +1,14 @@
+# Spring Boot (Java) - Ignore build files
+/To-Do-List/target/
+/To-Do-List/.idea/
+/To-Do-List/.mvn/
+/To-Do-List/.settings/
+/To-Do-List/hs_err_pid*
+
+# React - Ignore node_modules and build files
+/todolist/node_modules/
+/todolist/build/
+/todolist/.env
+/todolist/.idea/
+/todolist/.vscode/
+/todolist/dist/
