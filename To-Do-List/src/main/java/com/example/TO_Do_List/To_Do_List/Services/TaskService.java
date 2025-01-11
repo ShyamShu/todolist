@@ -36,6 +36,7 @@ public class TaskService {
     public List<Task> findByUser(User authenticatedUser) {
         List<Task> tasks = taskRepo.findByUser(authenticatedUser);
         //logger.info("list of task are : {}" , tasks.toString());
+        logger.info(tasks.toString());
         
 
         return tasks;
@@ -49,6 +50,21 @@ public class TaskService {
     
         }
         return null;
+    }
+
+    public Task updateTask(String id , Task modified) {
+
+        Task existingTask = findById(id);
+        
+        existingTask.setDescription(modified.getDescription());
+        existingTask.setCompleted(modified.isCompleted());
+
+        return taskRepo.save(existingTask);
+
+        
+
+        
+        
     }
     
 }
