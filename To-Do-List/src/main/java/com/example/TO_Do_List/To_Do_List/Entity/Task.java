@@ -1,5 +1,7 @@
 package com.example.TO_Do_List.To_Do_List.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 
 import jakarta.persistence.Id;
@@ -29,6 +31,7 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference  
     private User user;
 
     

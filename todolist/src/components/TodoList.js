@@ -17,6 +17,7 @@ const TodoList = () => {
   const fetchTasks = async () => {
     try {
       const response = await API.get("/task");
+      console.log("response data : " ,response);
       if (Array.isArray(response.data)) {
         setTasks(response.data);
       } else {
